@@ -29,4 +29,7 @@ public class User {
     )
     private java.util.Set<Role> roles = new java.util.HashSet<>();
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Profile profile;
+
 }
