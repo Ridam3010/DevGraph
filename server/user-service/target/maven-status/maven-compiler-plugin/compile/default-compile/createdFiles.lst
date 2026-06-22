@@ -1,0 +1,9 @@
+com\devgraph\userservice\entity\Profile.class
+com\devgraph\userservice\repository\ProfileRepository.class
+com\devgraph\userservice\entity\Role.class
+com\devgraph\userservice\service\UserService.class
+com\devgraph\userservice\controller\UserController.class
+com\devgraph\userservice\repository\RoleRepository.class
+com\devgraph\userservice\entity\User.class
+com\devgraph\userservice\repository\UserRepository.class
+com\devgraph\userservice\UserServiceApplication.class
