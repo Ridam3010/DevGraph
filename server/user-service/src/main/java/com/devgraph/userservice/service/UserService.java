@@ -44,6 +44,3 @@ public class UserService{
         return profileRepository.save(profile);
     }
 }
-
-    
-}

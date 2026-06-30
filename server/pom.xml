@@ -25,7 +25,8 @@
     </properties>
 
     <modules>
-    <module>user-service</module>        <!-- Modules will be added here on Day 2 -->
+        <module>user-service</module>
+        <module>problem-service</module>
     </modules>
 
     <dependencyManagement>

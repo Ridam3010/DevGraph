@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "ProblemServiceApplication",
+            "request": "launch",
+            "mainClass": "com.devgraph.problemservice.ProblemServiceApplication",
+            "projectName": "problem-service"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-UserServiceApplication<user-service>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
