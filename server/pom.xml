@@ -27,6 +27,7 @@
     <modules>
         <module>user-service</module>
         <module>problem-service</module>
+        <module>submission-service</module>
     </modules>
 
     <dependencyManagement>
