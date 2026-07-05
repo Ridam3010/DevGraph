@@ -15,6 +15,7 @@ import java.util.List;
 public class SubmissionController {
 
     private final SubmissionRepository submissionRepository;
+    private final com.devgraph.submissionservice.service.SubmissionPublisher submissionPublisher;
 
     // 1. Submit a new solution
     @PostMapping
@@ -24,8 +25,8 @@ public class SubmissionController {
         
         Submission saved = submissionRepository.save(submission);
         
-        // TODO: In the future, we will send this submission to a Message Queue (Redis/Kafka) here
-        // so the code-execution-service can run it!
+        // PUBLISH TO REDIS
+        submissionPublisher.sendToExecutionQueue(saved.getId());
         
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
