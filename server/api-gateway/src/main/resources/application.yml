@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        # TODO: Define routing rules here
+        # E.g., route /api/v1/users/** to localhost:8081
+        # E.g., route /api/v1/problems/** to localhost:8082
+        # E.g., route /api/v1/submissions/** to localhost:8083
