@@ -206,3 +206,23 @@ Because this project is a **Learning Journey**, we will prioritize understanding
 - [ ] Frontend Monaco editor can submit code and display the async result
 - [ ] Skill Graph API returns a valid structure based on user's solved problems
 - [ ] Postman collection updated with all new endpoints and shared
+
+---
+
+## 📅 High-Level Technology Schedule (Role-Agnostic)
+
+### Week 1: Core Architecture & Foundational Services
+- **Infrastructure:** Docker Compose (MySQL, Redis, Kafka, Zookeeper)
+- **Monorepo:** Maven multi-module parent POM
+- **Security & Routing:** Spring Cloud Gateway (`api-gateway`), JWT Authentication (`auth-service`)
+- **Data Layer:** Spring Data JPA with MySQL (`user-service`, `problem-service`, `submission-service`)
+- **Caching:** Redis integration for problem fetching and basic session storage
+- **Logging:** Centralized JSON logging via Logback/SLF4J
+- **Frontend Basics:** React + Vite, Login/Register pages, JWT storage
+
+### Week 2: Code Execution, Async Processing & Complex Features
+- **Async Messaging:** Apache Kafka producers and consumers for submissions
+- **Sandboxing:** Docker-based code execution sandbox (`code-execution-service`)
+- **Advanced UI:** Monaco Editor integration, WebSocket/Polling for real-time submission results
+- **Data Structures:** Skill Graph Service mapping nodes (algorithms/patterns) to user proficiency
+- **Analytics:** Updating user profiles asynchronously based on submission results

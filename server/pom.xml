@@ -29,6 +29,7 @@
         <module>problem-service</module>
         <module>submission-service</module>
         <module>api-gateway</module>
+        <module>auth-service</module>
     </modules>
 
     <dependencyManagement>
