@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "ApiGatewayApplication",
+            "request": "launch",
+            "mainClass": "com.devgraph.apigateway.ApiGatewayApplication",
+            "projectName": "api-gateway"
+        },
+        {
+            "type": "java",
             "name": "ProblemServiceApplication",
             "request": "launch",
             "mainClass": "com.devgraph.problemservice.ProblemServiceApplication",
