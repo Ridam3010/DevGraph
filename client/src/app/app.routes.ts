@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { Login } from './components/login/login';
-import { Dashboard } from './components/dashboard/dashboard'; 
-import { authGuard } from './guards/auth.guard'; // 1. Import the Bouncer
+import { Dashboard } from './components/dashboard/dashboard';
+import { authGuard } from './guards/auth-guard'; // 1. Import the Bouncer
 
 export const routes: Routes = [
   { path: 'login', component: Login },
