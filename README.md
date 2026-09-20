@@ -1,228 +1,214 @@
-# 🚀 DevGraph — Developer Intelligence Platform
+# DevGraph: Interactive Coding Platform
 
-A microservices-based developer platform that analyzes coding activity, executes code securely, and builds a dynamic skill graph. Users can solve problems, track results, and receive personalized recommendations.
+DevGraph is a portfolio-grade, full-stack microservices application designed as a coding platform (similar to LeetCode or HackerRank). It allows users to log in, view coding problems, submit solutions, and see their results in real-time.
 
 ---
 
-## 📁 Project Structure
+## 1. Implementation Idea & System Design
 
-```text
-DevGraph-Platform/
-├── client/         # React 18 Frontend (Vite)
-└── server/         # Spring Boot Microservices (Parent POM)
+**Implementation Idea:** 
+To build a scalable, highly-available coding platform where code execution, user authentication, and problem management are decoupled into independent microservices. This prevents a heavy code-execution task (like an infinite loop submitted by a user) from crashing the entire website for other users.
+
+**System Design:**
+The system uses a **Microservices Architecture** backend and a **Single Page Application (SPA)** frontend.
+- **API Gateway (Port 8080):** The single entry point. Handles CORS and routes traffic to the correct microservice.
+- **Auth Service (Port 8084):** Generates and validates JSON Web Tokens (JWTs).
+- **User Service (Port 8081):** Manages user profiles and registration data.
+- **Problem Service (Port 8082):** Manages coding problems, descriptions, difficulty levels, and test cases.
+- **Submission Service (Port 8083):** Handles the queue and execution logic for submitted code.
+
+---
+
+## 2. Tech Stack
+
+*   **Frontend:** Angular (v21, Zoneless), Tailwind CSS v3, TypeScript, RxJS.
+*   **Backend:** Java 21, Spring Boot 3, Spring Cloud Gateway.
+*   **Database:** MySQL (Relational Data), Redis (Caching & Message Queuing).
+*   **Infrastructure:** Docker & Docker Compose.
+
+---
+
+## 3. New Terminologies
+
+*   **Microservices:** Breaking down a giant backend into smaller, independent applications that talk to each other over the network.
+*   **API Gateway:** A "traffic cop" server that sits in front of all microservices and routes incoming requests.
+*   **JWT (JSON Web Token):** A secure, encrypted string given to a user after they log in. It acts as a digital VIP pass for future requests.
+*   **SPA (Single Page Application):** A website that only has one actual HTML file. It uses JavaScript to instantly swap out UI components.
+*   **Interceptor:** A frontend script that catches HTTP requests right before they leave the browser and modifies them (e.g., attaching the JWT).
+*   **Guard (AuthGuard):** A frontend script that acts like a bouncer, preventing unauthenticated users from viewing specific pages.
+
+---
+
+## 4. Comprehensive Week-to-Week & Day-to-Day Plan
+
+### [x] Week 1: Architecture & Backend Services Setup
+*   [x] **Day 1:** System Design & Architecture planning. We defined the Microservice structure, mapped out database schemas for Users and Problems, and decided on Docker for deployment.
+*   [x] **Day 2:** Initialize Spring Boot projects. We successfully scaffolded `user-service`, `auth-service`, `problem-service`, `submission-service`, and the `api-gateway` using Spring Initializr.
+*   [x] **Day 3:** Set up Git repository & structure. We organized the monorepo into `client/` and `server/` folders for clean separation of concerns.
+*   [x] **Day 4:** Write basic REST Controllers. We created placeholder endpoints across all microservices to test that they can boot up and receive traffic.
+*   [x] **Day 5:** Configure cross-service properties. We set up `application.properties` and `.yml` files to define ports (`8080`, `8081`, `8082`, etc.) and basic configurations.
+
+### [x] Week 2: Database & API Gateway Integration
+*   [x] **Day 1:** Write `docker-compose.yml`. We successfully wrote the configuration to spin up isolated MySQL and Redis containers.
+*   [x] **Day 2:** Connect Services to MySQL. We wired the `user-service` and `problem-service` to the database using Spring Data JPA for persistent storage.
+*   [x] **Day 3:** Connect to Redis. We configured the `submission-service` to talk to Redis, which will later be used for queuing code execution tasks.
+*   [x] **Day 4:** Configure API Gateway Routes. We updated the gateway's `application.yml` to securely route frontend traffic to the correct backend microservices.
+*   [x] **Day 5:** Configure Global CORS. We solved the cross-origin browser issues by allowing our Angular app (`localhost:4200`) to communicate with the gateway (`localhost:8080`).
+
+### [x] Week 3: Frontend Foundation & Authentication Flow
+*   [x] **Day 1:** Scaffold Angular. We generated the modern, Zoneless Angular 21 client application.
+*   [x] **Day 2:** Configure Tailwind CSS & Build Login UI. We built a beautiful, dark-mode Tailwind CSS login screen (`LoginComponent`).
+*   [x] **Day 3:** Build `AuthService`. We connected the Login UI to the backend `/api/v1/auth/login` endpoint to successfully retrieve a JWT token.
+*   [x] **Day 4:** Implement `AuthGuard`. We successfully protected the `/dashboard` route so only authenticated users with a token can view it.
+*   [x] **Day 5:** Implement `AuthInterceptor`. We wrote an interceptor to secretly attach the `Authorization: Bearer <token>` header to all outgoing requests.
+
+### [ ] Week 4: Dashboard UI & Dynamic Data (CURRENTLY HERE)
+*   [x] **Day 1:** Build the Dashboard HTML layout. We created a sleek Sidebar and Main Content table for viewing problems. *(Almost done!)*
+*   [x] **Day 2:** Build `ProblemService`. We wrote the TypeScript service to fetch the list of coding problems from our backend.
+*   [ ] **Day 3:** Dynamic Rendering. We need to use Angular's `@for` loop in the HTML to instantly render table rows for every problem sent by the backend.
+*   [ ] **Day 4:** Error Handling & Loading states. Add visual spinners and error popups to provide a smooth user experience.
+*   [ ] **Day 5:** Refine the UI. We will add hover effects, and color-coded status indicators (e.g., "Solved" in green).
+
+### [ ] Week 5: Code Editor Workspace
+*   [ ] **Day 1:** Create `WorkspaceComponent`. Design a split-screen view with the problem description on the left and the editor on the right.
+*   [ ] **Day 2:** Integrate Monaco Editor. We will install and configure the exact same code editor engine that powers VS Code inside our web app.
+*   [ ] **Day 3:** Fetch Single Problem Data. Wire up the UI to fetch detailed descriptions, difficulty, and starter code for a specific problem by its ID.
+*   [ ] **Day 4:** Build Submission Logic. We will write the frontend logic to capture the user's typed code and send it to the backend `submission-service`.
+*   [ ] **Day 5:** UI Response Handling. Design the terminal output window to show users if they got a syntax error, runtime error, or if they successfully passed.
+
+### [ ] Week 6: Code Execution & Leaderboard
+*   [ ] **Day 1:** (Backend) Execution Sandbox. We will implement Docker-in-Docker or an isolated runtime to securely execute user code without risking our servers.
+*   [ ] **Day 2:** (Backend) Test Case Verification. We will write the logic to compile the code, feed it hidden test cases from the database, and verify the outputs match.
+*   [ ] **Day 3:** Build Leaderboard UI. We will fetch a list of top users based on problems solved and render a competitive leaderboard.
+*   [ ] **Day 4:** Final Polish. Add micro-animations, transitions, and finalize the dark-mode aesthetic across the entire app.
+*   [ ] **Day 5:** Deployment. Prepare the codebase for portfolio deployment (e.g., packaging into Docker containers and setting up CI/CD).
+
+---
+
+## 5. Team Profiles
+
+Even though you are building this solo, here is the professional breakdown of who does what:
+
+**1. Backend Engineer (Alice)**
+*   *Week 1-2:* Created the Java/Spring Boot microservices, configured MySQL schemas, and built the API Gateway.
+*   *Week 3-4:* Securing the backend endpoints and ensuring the gateway properly validates JWTs.
+*   *Week 5-6:* Developing the complex, isolated code execution sandbox in the `submission-service`.
+
+**2. Frontend Engineer (Bob)**
+*   *Week 1-2:* Scaffolded Angular, set up Tailwind CSS, and wireframed the application.
+*   *Week 3-4:* Built the Login/Dashboard views, wrote Auth Guards, Interceptors, and connected UI to Alice's REST APIs.
+*   *Week 5-6:* Integrating the Monaco Code Editor and building the real-time submission results UI.
+
+**3. DevOps / Architecture (Charlie)**
+*   *Week 1-2:* Designed the microservice architecture diagram and managed the `docker-compose` networking.
+*   *Week 3-6:* Managing Redis queues, monitoring system health, and ensuring the code-execution engine runs safely in isolated containers.
+
+---
+
+## 6. Project Architecture & Diagrams
+
+Yes, your project **actually has** all of these moving parts! The diagrams below have been expanded to show the exact files, services, and logic that exist (or will exist) in the DevGraph repository.
+
+### A. Overall Implementation Flow
+This graph shows the physical layout of your servers and databases.
+```mermaid
+graph TD
+    A[User Browser / Angular :4200] -->|HTTP Requests| B(API Gateway :8080)
+    B -->|/api/v1/auth/**| C[Auth Service :8084]
+    B -->|/api/v1/users/**| D[User Service :8081]
+    B -->|/api/v1/problems/**| E[Problem Service :8082]
+    B -->|/api/v1/submissions/**| F[Submission Service :8083]
+    
+    C <--> G[(MySQL Database)]
+    D <--> G
+    E <--> G
+    F <--> G
+    F <--> H[(Redis Message Broker)]
 ```
 
----
-
-## 💻 Frontend Overview (`client/`)
-
-Status: `MVP screens pending` ⏳
-
-**Tech Stack:**
-- **UI Framework:** React 18 (Vite)
-- **Styling:** Tailwind CSS + Radix UI
-- **State/Routing:** React Router v6 + Context API
-- **Code Editor:** Monaco Editor
-- **Real-time:** WebSockets (SockJS + STOMP)
-
-**Running the frontend:**
-```bash
-cd client
-npm install
-npm run dev # Starts on http://localhost:5173
+### B. Component Diagram (Frontend Internal Structure)
+This shows the exact structure of the Angular app you are writing.
+```mermaid
+flowchart LR
+    subgraph Angular App
+        Router[app.routes.ts] --> Guard[auth.guard.ts]
+        Guard -->|Passes| Dashboard[dashboard.ts]
+        Guard -->|Fails| Login[login.ts]
+        
+        Dashboard --> ProbService[problem.service.ts]
+        Login --> AuthService[auth.service.ts]
+        
+        ProbService --> Interceptor[auth.interceptor.ts]
+        AuthService --> Interceptor
+    end
+    
+    Interceptor -->|Attaches 'Bearer Token'| Backend[Spring API Gateway]
 ```
 
----
-
-## ⚙️ Backend Overview (`server/`)
-
-Status: `Phase 1 (Setup & Architecture) in progress` ⏳ | `Core Work Plan in Progress`
-
-**Core Tech Stack**
-
-| Layer | Technology | Status |
-| :--- | :--- | :--- |
-| **Backend** | Spring Boot 3.x + Java 17 | ⏳ Pending |
-| **Database** | MySQL 8.0 (Spring Data JPA) | ⏳ Pending |
-| **Cache** | Redis (TTL & fast access) | ⏳ Pending |
-| **Auth** | JWT (Access + Refresh Tokens) + Spring Security | ⏳ Pending |
-| **Integrations** | Apache Kafka (Async messaging) | ⏳ Pending |
-| **Infrastructure** | Docker Compose + Spring Cloud Gateway | ⏳ Pending |
-
-**Infrastructure (Docker)**
-Spins up MySQL, Redis, and Kafka/Zookeeper.
-
-```bash
-cd server
-docker-compose up -d
+### C. Use Case Diagram
+This maps out what a user can physically do on the platform.
+```mermaid
+flowchart LR
+    User([Platform User])
+    
+    UC1(Register / Log In)
+    UC2(View Problem List)
+    UC3(Read Problem Description)
+    UC4(Write & Execute Code)
+    UC5(View Test Case Results)
+    UC6(View Leaderboard)
+    
+    User --> UC1
+    User --> UC2
+    User --> UC3
+    User --> UC4
+    User --> UC5
+    User --> UC6
 ```
 
-**Running the backend:**
-```bash
-cd server
-./mvnw clean install
-./mvnw spring-boot:run -pl api-gateway # Example for running a specific service
+### D. Activity Diagram (Submission Flow)
+This tracks the step-by-step logic when you click the "Submit Code" button.
+```mermaid
+stateDiagram-v2
+    [*] --> TypeCode
+    TypeCode --> ClickSubmit
+    ClickSubmit --> FrontendSendsRequest
+    FrontendSendsRequest --> GatewayValidatesToken
+    GatewayValidatesToken --> SubmissionServiceQueuesTask
+    SubmissionServiceQueuesTask --> CodeExecutesInSandbox
+    CodeExecutesInSandbox --> CheckAgainstTestCases
+    CheckAgainstTestCases --> ReturnPassOrFail
+    ReturnPassOrFail --> FrontendDisplaysResult
+    FrontendDisplaysResult --> [*]
 ```
 
----
+### E. Data Flow Diagram (DFD)
+This shows how data (Credentials, Tokens, Code, Results) moves between the entities.
+```mermaid
+flowchart TD
+    U((User)) -->|1. Username/Password| Auth[Auth Service]
+    Auth -->|2. Returns JWT Token| U
+    
+    U -->|3. Source Code + Token| Exec[Submission Service]
+    Exec -->|4. Request Test Cases| DB[(MySQL DB)]
+    DB -->|5. Test Cases Data| Exec
+    Exec -->|6. Execution Results| U
+```
 
-## ⚠️ Key Developer Rules
-
-1. **Database:** Do not use raw SQL. Use Spring Data JPA `@Entity` and `Repository` interfaces.
-2. **Security:** All endpoints (except login/register) must be secured behind JWT verification in the Gateway.
-3. **Async Logic:** Any heavy processing (Code Execution, Analytics) MUST be pushed to Kafka and handled asynchronously.
-4. **Sandboxing:** User code MUST only be executed inside isolated Docker containers, never on the host machine.
-5. **Secrets:** Never commit secrets (DB passwords, JWT secrets) to version control. Use `.env` files.
-
----
-
-## 🧠 Mentorship & Learning Objectives
-
-Because this project is a **Learning Journey**, we will prioritize understanding *why* we do things over just writing code. 
-- **Concept First:** Before writing any complex logic (e.g., Kafka consumers, JWT filters), the Senior Architect (Mentor) will explain the theory and architecture.
-- **Code Reviews:** Every PR will be reviewed with detailed feedback on best practices, REST design, and Clean Code principles.
-- **Real-World Practices:** You will learn enterprise patterns like DTO mapping, global exception handling, and database migrations.
-
----
-
-## DevGraph Backend — Developer Work Plan
-
-### BE1 — Infrastructure Developer (Senior Architect / Mentor)
-*Provides architecture, boilerplate, and explanations for BE2.*
-
-#### Week 1
-**Day 1**
-- [ ] Create the GitHub repository and branch protection rules
-- [ ] Initialize Spring Boot multi-module project (Parent POM)
-- [ ] Create `docker-compose.yml` with MySQL 8.0 and Redis containers
-
-**Day 2**
-- [ ] Create `api-gateway` module with Spring Cloud Gateway
-- [ ] Create `auth-service` module
-- [ ] Set up Spring Security and JWT utility classes (generate/validate tokens)
-
-**Day 3 & 4**
-- [ ] Add Kafka and Zookeeper/Kraft to `docker-compose.yml`
-- [ ] Create `shared-library` module for common DTOs and exception handling
-
-**Day 5**
-- [ ] Set up Dockerfile templates for Java microservices
-- [ ] Configure centralized logging (Logback/SLF4J) to output JSON logs
-
-#### Week 2
-**Day 6 & 7**
-- [ ] Create `code-execution-service` module and Kafka consumers
-- [ ] Build isolated Docker sandbox logic using Java `ProcessBuilder`
-
----
-
-### BE2 — Business Logic Developer (Backend Engineer / You)
-
-#### Week 1
-**Day 1 — Most Important Task**
-> 📚 **Learning Focus:** ORM (Object-Relational Mapping), Spring Data JPA, and Database Schema Design.
-- [ ] Write `User`, `Role`, and `Profile` JPA Entities in `user-service`
-- [ ] Create Liquibase/Flyway migration scripts for user tables
-- [ ] Connect `user-service` to MySQL via Spring Data JPA
-
-**Day 2**
-> 📚 **Learning Focus:** RESTful API Design, Controller-Service-Repository Pattern, HTTP Status Codes.
-- [ ] Create REST endpoints for `/api/v1/users/register` and `/api/v1/users/login` (interacting with Auth Service)
-- [ ] Create `/api/v1/users/{id}/profile` GET/PUT endpoints
-- [ ] Test user registration and login flow using Postman
-
-**Day 3**
-> 📚 **Learning Focus:** Relational Data Modeling (One-to-Many, Many-to-Many) and Seeding Data.
-- [ ] Write `Problem` and `TestCase` JPA Entities in `problem-service`
-- [ ] Create repository interfaces for Problem database access
-- [ ] Seed database with 5 sample coding problems (Easy, Medium, Hard)
-
-**Day 4**
-> 📚 **Learning Focus:** Pagination, Filtering, and Distributed Caching with Redis.
-- [ ] Create REST endpoints: `GET /api/v1/problems`, `GET /api/v1/problems/{id}`
-- [ ] Implement pagination and filtering for problem lists
-- [ ] Integrate Redis caching for `GET /api/v1/problems/{id}`
-
-**Day 5**
-> 📚 **Learning Focus:** Event-Driven Architecture and decoupling services.
-- [ ] Write `Submission` JPA Entity in `submission-service`
-- [ ] Create endpoint `POST /api/v1/submissions`
-- [ ] Ensure `POST` endpoint saves submission as `PENDING` and pushes Kafka event
-
-#### Week 2
-**Day 6**
-> 📚 **Learning Focus:** Consuming Events, Async Processing, and Aggregating Data.
-- [ ] Create `analytics-service` module and database schema
-- [ ] Consume execution results from Kafka in Analytics Service
-- [ ] Calculate user success rate and average execution time
-
-**Day 7**
-> 📚 **Learning Focus:** Graph Data Structures in practice and complex JSON serialization.
-- [ ] Create `skill-graph-service` module
-- [ ] Define Graph nodes (Skills: Arrays, Trees, DP) and edges (User proficiency)
-- [ ] Write API to fetch a user's skill graph JSON for the frontend
-
----
-
-### FE1 — Frontend & Integrations Developer (You)
-
-#### Week 1
-**Day 1 & 2**
-> 📚 **Learning Focus:** React 18, State Management, and secure JWT handling on the client.
-- [ ] Initialize React + Vite project (`client`)
-- [ ] Create Login and Registration pages
-- [ ] Implement JWT storage in HTTP-only cookies or LocalStorage
-- [ ] Create Axios interceptor to attach JWT to outgoing requests
-
-**Day 3 & 4**
-> 📚 **Learning Focus:** Integrating 3rd party libraries (Monaco Editor) and API consumption.
-- [ ] Build "Problem Explorer" and "Problem Details" pages
-- [ ] Integrate Monaco Editor (VS Code web editor)
-- [ ] Wire up "Run Code" button to hit Submission Service
-
-**Day 5**
-> 📚 **Learning Focus:** Real-time WebSockets and asynchronous UI updates.
-- [ ] Add WebSocket or Polling hook to listen for submission results
-- [ ] Build result modal (Success, Wrong Answer, Time Limit Exceeded)
-
----
-
-## 🛡️ Week 1 Exit Checklist — All Must Pass Before Week 2
-
-- [ ] `docker-compose up` spins up MySQL, Redis, and Kafka without errors
-- [ ] API Gateway successfully routes traffic to Auth and User services
-- [ ] JWT tokens are successfully generated on login and validated on protected routes
-- [ ] Redis successfully caches problem descriptions
-- [ ] User can register, login, and view a list of problems via Postman
-- [ ] Frontend React app can display the problem list using mock data or API
-- [ ] All database schemas created and migrations run successfully
-
-## 🛡️ Week 2 Exit Checklist — All Must Pass Before Week 3
-
-- [ ] Submissions successfully publish to Kafka `submissions` topic
-- [ ] Code Execution Service successfully consumes and runs Python/Java code in a sandbox
-- [ ] Execution results are published back to `results` topic
-- [ ] Analytics Service updates user stats in database based on results
-- [ ] Frontend Monaco editor can submit code and display the async result
-- [ ] Skill Graph API returns a valid structure based on user's solved problems
-- [ ] Postman collection updated with all new endpoints and shared
-
----
-
-## 📅 High-Level Technology Schedule (Role-Agnostic)
-
-### Week 1: Core Architecture & Foundational Services
-- **Infrastructure:** Docker Compose (MySQL, Redis, Kafka, Zookeeper)
-- **Monorepo:** Maven multi-module parent POM
-- **Security & Routing:** Spring Cloud Gateway (`api-gateway`), JWT Authentication (`auth-service`)
-- **Data Layer:** Spring Data JPA with MySQL (`user-service`, `problem-service`, `submission-service`)
-- **Caching:** Redis integration for problem fetching and basic session storage
-- **Logging:** Centralized JSON logging via Logback/SLF4J
-- **Frontend Basics:** React + Vite, Login/Register pages, JWT storage
-
-### Week 2: Code Execution, Async Processing & Complex Features
-- **Async Messaging:** Apache Kafka producers and consumers for submissions
-- **Sandboxing:** Docker-based code execution sandbox (`code-execution-service`)
-- **Advanced UI:** Monaco Editor integration, WebSocket/Polling for real-time submission results
-- **Data Structures:** Skill Graph Service mapping nodes (algorithms/patterns) to user proficiency
-- **Analytics:** Updating user profiles asynchronously based on submission results
+### F. State Diagram (A Single Code Submission)
+This tracks the "State" of a code submission from the database's perspective.
+```mermaid
+stateDiagram-v2
+    [*] --> PENDING : User Submits Code
+    PENDING --> EXECUTING : Worker picks up task from Redis
+    EXECUTING --> ACCEPTED : All test cases pass
+    EXECUTING --> WRONG_ANSWER : Output does not match
+    EXECUTING --> TIME_LIMIT_EXCEEDED : Code runs too long
+    EXECUTING --> RUNTIME_ERROR : Code crashes (e.g., NullPointer)
+    EXECUTING --> COMPILE_ERROR : Syntax Error
+    ACCEPTED --> [*]
+    WRONG_ANSWER --> [*]
+    TIME_LIMIT_EXCEEDED --> [*]
+    RUNTIME_ERROR --> [*]
+    COMPILE_ERROR --> [*]
+```
