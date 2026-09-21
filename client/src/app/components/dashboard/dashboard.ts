@@ -11,18 +11,20 @@ import { CommonModule } from '@angular/common';
 export class Dashboard implements OnInit {
   private problemService = inject(ProblemService);
   
-  // This will hold the data from the backend
   problems: any[] = [];
+  
+  // 1. Create a variable to track if we are waiting for the server
+  isLoading: boolean = true; 
 
-  // This runs automatically when the dashboard loads!
   ngOnInit() {
     this.problemService.getProblems().subscribe({
       next: (data) => {
         this.problems = data; 
-        console.log("Fetched problems:", data);
+        this.isLoading = false; // 2. Turn off the loading spinner!
       },
       error: (err) => {
         console.error("Failed to fetch problems", err);
+        this.isLoading = false; // Turn it off even if it fails, so it doesn't spin forever
       }
     });
   }
